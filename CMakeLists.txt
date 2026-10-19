@@ -107,3 +107,24 @@ target_link_libraries(SIDStep2
     PUBLIC
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags)
+
+# ---------------------------------------------------------------------------
+# sidstep2-render: headless command-line host (MIDI file in, WAV out) for
+# scripted / LLM-driven use and for smoke-testing the built plugin.
+option(SIDSTEP2_BUILD_RENDER_TOOL "Build the sidstep2-render command-line host" ON)
+if(SIDSTEP2_BUILD_RENDER_TOOL)
+    juce_add_console_app(sidstep2-render PRODUCT_NAME "sidstep2-render")
+    target_sources(sidstep2-render PRIVATE Tools/Render/Main.cpp)
+    target_compile_definitions(sidstep2-render PRIVATE
+        JUCE_PLUGINHOST_VST3=1
+        JUCE_PLUGINHOST_LV2=1
+        JUCE_WEB_BROWSER=0
+        JUCE_USE_CURL=0
+        JUCE_DISPLAY_SPLASH_SCREEN=0)
+    target_link_libraries(sidstep2-render PRIVATE
+        juce::juce_audio_processors
+        juce::juce_audio_formats
+        juce::juce_gui_extra
+        juce::juce_recommended_config_flags
+        juce::juce_recommended_warning_flags)
+endif()

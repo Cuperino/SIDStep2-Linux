@@ -39,3 +39,17 @@ Copy the VST3 bundle to `~/.vst3` and the LV2 bundle to `~/.lv2` (or configure w
 The plugin binaries are linked against old glibc symbol versions (`Linux/glibc_compat.c`), so they
 also load in sandboxed hosts with an older runtime, such as the Flatpak builds of LMMS (via its bundled
 Carla), Ardour or Carla.
+
+### Rendering without a DAW
+
+`sidstep2-render` is a small command-line host that plays a MIDI file through the plugin and
+writes a WAV, with no display or audio device needed. MIDI channels 1-3 drive SID voices 1-3.
+
+```
+R=build/sidstep2-render_artefacts/Release/sidstep2-render
+P=build/SIDStep2_artefacts/Release/VST3/SIDStep2.vst3
+$R --plugin $P --list-params
+$R --plugin $P --midi song.mid --out song.wav --param "Low Pass=1" --param "Filter 1=1" --param "Cutoff=0.2"
+$R --plugin $P --test --out test.wav --state-out my.state    # built-in riff, save state
+$R --plugin $P --midi song.mid --state-in my.state --out song2.wav
+```

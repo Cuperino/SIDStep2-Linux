@@ -14,7 +14,7 @@ PatchTreeBuilder::populateTree (
 {
 	TreeViewItem *root = new PatchTreeViewNode(Misc);
 
-	ScopedPointer<XmlElement> patchesElement = properties->GetPatches();
+	auto patchesElement = properties->GetPatches();
 
 	for (int i = 0; i < patchesElement->getNumChildElements(); i++) {
 		XmlElement *categoryElement = patchesElement->getChildElement(i);

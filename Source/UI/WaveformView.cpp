@@ -137,11 +137,8 @@ void
 
         // allocate memory
         const auto samples = f * duration + spf * 2;
-        const ScopedPointer < short > render  = new short[static_cast < int > ( samples + spf )];
-        memset (
-                render
-              , 0
-              , static_cast < int > ( samples + spf ) );
+        std::vector < short > render_buffer ( static_cast < size_t > ( samples + spf ), 0 );
+        short* const render = render_buffer . data ();
 
         // reset sid chip and let run for a while
         auto s = new SID ();
@@ -264,9 +261,11 @@ void
             const auto maxPixel = ( max + most ) / amplitude_values_per_pixel;
             if ( minPixel == maxPixel )
             {
-                g . setPixel (
+                g . fillRect (
                               i
-                            , minPixel );
+                            , minPixel
+                            , 1
+                            , 1 );
             }
             else
             {

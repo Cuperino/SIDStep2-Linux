@@ -1116,7 +1116,7 @@ PatchEditor::PatchEditor (
     commandTableViewport -> setViewedComponent (
                                                 wavetable . get ()
                                               , false );
-    commandTableViewport -> getVerticalScrollBar () -> setAutoHide (
+    commandTableViewport -> getVerticalScrollBar () . setAutoHide (
                                                                     false );
     bankMenu -> setVisible (
                             false );

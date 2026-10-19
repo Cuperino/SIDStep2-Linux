@@ -1,3 +1,4 @@
+#include <climits>
 #include "Exporter.h"
 #include "Command.h"
 #include "Recorder.h"
@@ -23,7 +24,7 @@ auto
     for ( const auto& command : temp_pattern )
     {
         const auto current_time = command -> GetTime () - static_cast < long > ( first_frame );
-        _ASSERT (
+        jassert (
                  current_time >= 0 );
         while ( static_cast < long > ( current_time ) > static_cast < long > ( current_frame ) )
         {

@@ -4,7 +4,7 @@
 
 #include <JuceHeader.h>
 
-#include "../Requirements/resid-0.16/SID.h"  // NOLINT(clang-diagnostic-nonportable-include-path)
+#include "../Requirements/resid-0.16/sid.h"
 
 #include "Exporter.h"
 #include "Recorder.h"

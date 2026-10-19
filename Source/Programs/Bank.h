@@ -14,7 +14,7 @@
 class SID;
 class SharedProperties;
 
-struct Note;
+#include "../Note.h"
 
 
 class Bank final

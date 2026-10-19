@@ -2,7 +2,7 @@
 #define PATCHTREEBUILDER_H_INCLUDED
 
 
-#include "../JuceLibraryCode/JuceHeader.h"
+#include <JuceHeader.h>
 #include "../Listeners/ListenerInitializer.h"
 #include "Categories.h"
 #include "../SharedProperties.h"

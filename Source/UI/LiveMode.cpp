@@ -2340,7 +2340,7 @@ LiveMode::LiveMode (
                                             dispatcher );
     patchesViewport -> setViewedComponent (
                                            patches . get () );
-    patchesViewport -> getVerticalScrollBar () -> setAutoHide (
+    patchesViewport -> getVerticalScrollBar () . setAutoHide (
                                                                false );
     patchSelector -> setVisible (
                                  false );

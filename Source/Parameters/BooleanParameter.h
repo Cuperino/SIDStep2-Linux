@@ -2,7 +2,7 @@
 #define BOOLEANPARAMETER_H_INCLUDED
 
 
-#include "JuceHeader.h"
+#include <JuceHeader.h>
 
 
 class BooleanParameter : public juce::AudioProcessorParameter {

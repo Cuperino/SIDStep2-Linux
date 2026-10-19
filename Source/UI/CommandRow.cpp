@@ -191,7 +191,7 @@ void
     for ( size_t argument_index = 0 ; argument_index < arguments . size () ; argument_index++ )
     {
         auto argument_label = std::make_shared < Label > (
-                                                          String::empty
+                                                          String ()
                                                         , String::toHexString (
                                                                                arguments . at (
                                                                                                argument_index ) ) . paddedLeft (

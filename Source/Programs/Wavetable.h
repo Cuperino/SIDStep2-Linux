@@ -1,7 +1,7 @@
 #ifndef WAVETABLE_H_INCLUDED
 #define WAVETABLE_H_INCLUDED
 
-#include "JuceHeader.h"
+#include <JuceHeader.h>
 
 #include <array>
 

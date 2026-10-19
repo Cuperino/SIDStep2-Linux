@@ -167,21 +167,21 @@ public:
     static constexpr double cutoff_offset = 0.0833333333;
 
 private:
-    static const int        register_array_size       = 0x19;
-    static const int        last_register             = 0x18;
-    static const int        low_nybble_max            = 0x0f;
-    static const int        _8_bits_max               = 0xff;
-    static const int        _7_bits_max               = 0x7f;
-    static const int        delay_bit                 = 0x80;
-    static const int        data_row_length           = 0x10;
-    static const int        voice_control_offset      = 4;
-    static const int        attack_decay_offset       = 5;
-    static const int        sustain_release_offset    = 6;
-    static const int        pulse_hi_nybble           = 0xf00;
-    static const int        pulse_hi_nybble_bit_shift = 8;
-    static const int        voice_register_offset     = 7;
-    static const int        wavetable_command_bitmask = 0xfe;
-    static const int        pulse_width_default       = 0x08;
+    static constexpr int        register_array_size       = 0x19;
+    static constexpr int        last_register             = 0x18;
+    static constexpr int        low_nybble_max            = 0x0f;
+    static constexpr int        _8_bits_max               = 0xff;
+    static constexpr int        _7_bits_max               = 0x7f;
+    static constexpr int        delay_bit                 = 0x80;
+    static constexpr int        data_row_length           = 0x10;
+    static constexpr int        voice_control_offset      = 4;
+    static constexpr int        attack_decay_offset       = 5;
+    static constexpr int        sustain_release_offset    = 6;
+    static constexpr int        pulse_hi_nybble           = 0xf00;
+    static constexpr int        pulse_hi_nybble_bit_shift = 8;
+    static constexpr int        voice_register_offset     = 7;
+    static constexpr int        wavetable_command_bitmask = 0xfe;
+    static constexpr int        pulse_width_default       = 0x08;
     static constexpr double clock_freq                = 985248.0;
     static constexpr double sample_freq               = 44100.0;
     static constexpr double pass_freq                 = 19845.0;

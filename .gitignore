@@ -15,3 +15,5 @@ Package
 *.ipch
 *.obj
 *.tlog
+/build/
+/build-*/

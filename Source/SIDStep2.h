@@ -1,6 +1,7 @@
 #pragma once
 
 
+#include <climits>
 #include <JuceHeader.h>
 
 

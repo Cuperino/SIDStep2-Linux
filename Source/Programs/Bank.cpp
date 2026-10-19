@@ -5,7 +5,7 @@
 #include "../SIDProgram.h"
 
 
-#include "../Requirements/resid-0.16/sid.h"
+#include "../../Requirements/resid-0.16/sid.h"
 
 
 #include "../SharedProperties.h"
@@ -185,7 +185,7 @@ void
             const String id
             )
 {
-    const ScopedPointer < XmlElement > patches_element = properties -> getXmlValue (
+    const auto patches_element = properties -> getXmlValue (
                                                                                     "patches" );
     auto        i                       = 0;
     XmlElement* current_program_element = nullptr;
@@ -215,7 +215,7 @@ void
 void
     Bank::onBankSave ()
 {
-    const ScopedPointer < XmlElement > patches_element = properties -> getXmlValue (
+    const auto patches_element = properties -> getXmlValue (
                                                                                     "patches" );
     auto        i                       = 0;
     XmlElement* current_program_element = nullptr;
@@ -237,7 +237,7 @@ void
                              current_program_element );
     properties -> setValue (
                             "patches"
-                          , patches_element );
+                          , patches_element . get () );
     dispatcher -> bankProgramChangedListeners -> call (
                                                        &BankProgramChanged::onBankProgramChanged
                                                      , currentProgram -> GetId () . toDashedString ()
@@ -254,7 +254,7 @@ void
     // TODO: Need way to replace old programs on a save as - in place, but not positive this works properly
     const auto old_id = currentProgram -> GetId () . toDashedString ();
     currentProgram -> ResetId ();
-    const ScopedPointer < XmlElement > patches_element = properties -> getXmlValue (
+    const auto patches_element = properties -> getXmlValue (
                                                                                     "patches" );
     auto category_element = patches_element -> getChildByName (
                                                                GetCategoryElementName (
@@ -267,7 +267,7 @@ void
                                          current_program_element );
     properties -> setValue (
                             "patches"
-                          , patches_element );
+                          , patches_element . get () );
     dispatcher -> bankProgramChangedListeners -> call (
                                                        &BankProgramChanged::onBankProgramChanged
                                                      , old_id
@@ -433,7 +433,7 @@ void
 void
     Bank::NotesOff ()
 {
-    for each ( unsigned int cn in releasedNotes )
+    for ( unsigned int cn : releasedNotes )
     {
         int nit;
         for ( nit = 0 ; nit < notes . size () ; nit++ )

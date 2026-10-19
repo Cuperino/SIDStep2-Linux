@@ -15,6 +15,12 @@
 //#include "UI/ExportManager.h"
 
 Sidstep2AudioProcessor::Sidstep2AudioProcessor ()
+    :
+    AudioProcessor (
+                    BusesProperties () . withOutput (
+                                                     "Output"
+                                                   , AudioChannelSet::stereo ()
+                                                   , true ) )
 {
     dispatcher = std::make_shared < EventDispatcher > ();
 
@@ -183,28 +189,16 @@ void
 void
     Sidstep2AudioProcessor::releaseResources () {}
 
-#ifndef JucePlugin_PreferredChannelConfigurations
-bool Sidstep2AudioProcessor::setPreferredBusArrangement (bool isInput, int bus, const AudioChannelSet& preferredSet)
+auto
+    Sidstep2AudioProcessor::isBusesLayoutSupported (
+            const BusesLayout& layouts
+            ) const -> bool
 {
-    const int numChannels = preferredSet.size();
-
-#if JucePlugin_IsMidiEffect
-    if (numChannels != 0)
-        return false;
-#elif JucePlugin_IsSynth
-    if (isInput || (numChannels != 1 && numChannels != 2))
-        return false;
-#else
-    if (numChannels != 1 && numChannels != 2)
-        return false;
-
-    if (! AudioProcessor::setPreferredBusArrangement (! isInput, bus, preferredSet))
-        return false;
-#endif
-
-    return AudioProcessor::setPreferredBusArrangement (isInput, bus, preferredSet);
+    if ( layouts . inputBuses . size () > 0 && !layouts . getMainInputChannelSet () . isDisabled () ) { return false; }
+    const auto& output = layouts . getMainOutputChannelSet ();
+    return output == AudioChannelSet::mono () || output == AudioChannelSet::stereo ();
 }
-#endif
+
 
 void
     Sidstep2AudioProcessor::processBlock (
@@ -212,19 +206,54 @@ void
           , MidiBuffer&        midi_messages
             )
 {
+    ScopedNoDenormals no_denormals;
+
+    // Hosts are allowed to provide no play head at all (offline renderers and
+    // headless/scripted hosts often don't), so fall back to a stopped
+    // transport instead of dereferencing a null pointer.
     AudioPlayHead::CurrentPositionInfo position_info {};
-    if ( !playHead -> getCurrentPosition (
-                                          position_info ) )
+    position_info . resetToDefault ();
+    if ( auto* play_head = getPlayHead () )
     {
-        NativeMessageBox::showMessageBox (
-                                          AlertWindow::AlertIconType::WarningIcon
-                                        , "Fucking Shit"
-                                        , "Your DAW is a piece of shit, go get a better one." );
+        if ( const auto position = play_head -> getPosition () )
+        {
+            position_info . bpm           = position -> getBpm () . orFallback ( 0.0 );
+            position_info . timeInSamples = position -> getTimeInSamples () . orFallback ( 0 );
+            position_info . timeInSeconds = position -> getTimeInSeconds () . orFallback ( 0.0 );
+            position_info . ppqPosition   = position -> getPpqPosition () . orFallback ( 0.0 );
+            position_info . isPlaying     = position -> getIsPlaying ();
+            position_info . isRecording   = position -> getIsRecording ();
+            position_info . isLooping     = position -> getIsLooping ();
+            if ( const auto loop = position -> getLoopPoints () )
+            {
+                position_info . ppqLoopStart = loop -> ppqStart;
+                position_info . ppqLoopEnd   = loop -> ppqEnd;
+            }
+            if ( const auto sig = position -> getTimeSignature () )
+            {
+                position_info . timeSigNumerator   = sig -> numerator;
+                position_info . timeSigDenominator = sig -> denominator;
+            }
+        }
     }
+
+    buffer . clear ();
     core -> Generate (
                       midi_messages
                     , buffer
                     , position_info );
+
+    // The SID is mono and renders into channel 0; mirror it to any other outputs.
+    for ( auto channel = 1 ; channel < buffer . getNumChannels () ; ++channel )
+    {
+        buffer . copyFrom (
+                           channel
+                         , 0
+                         , buffer
+                         , 0
+                         , 0
+                         , buffer . getNumSamples () );
+    }
 }
 
 

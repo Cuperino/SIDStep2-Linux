@@ -12,7 +12,7 @@ SharedProperties::SharedProperties ()
              GetOptions () ) { InitializeProperties (); }
 
 auto
-    SharedProperties::GetPatches () const -> XmlElement*
+    SharedProperties::GetPatches () const -> std::unique_ptr < XmlElement >
 {
     return getXmlValue (
                         "patches" );
@@ -21,15 +21,15 @@ auto
 void
     SharedProperties::InitializeProperties ()
 {
-    ScopedPointer < XmlElement > patches_element = GetPatches ();
+    auto patches_element = GetPatches ();
     if ( patches_element == nullptr )
     {
         // Once some presets are written, then they'll be embedded and initially written out here
-        patches_element = new XmlElement (
+        patches_element = std::make_unique < XmlElement > (
                                           "patches" );
         setValue (
                   "patches"
-                , patches_element );
+                , patches_element . get () );
     }
     if ( patches_element -> getNumChildElements () == 0 )
     {

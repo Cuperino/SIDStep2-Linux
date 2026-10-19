@@ -1,10 +1,11 @@
+#include <climits>
 #include "Wavetable.h"
 
 
 #include <array>
 
 
-#include "JuceHeader.h"
+#include <JuceHeader.h>
 
 
 #include "../SIDProgram.h"
@@ -93,7 +94,7 @@ Wavetable::Wavetable (
   , forVoice (
               other . forVoice )
 {
-    for each ( unsigned int row in other . waveTable )
+    for ( unsigned int row : other . waveTable )
         waveTable . add (
                          row );
     selectedRow = waveTable . size ();
@@ -116,7 +117,7 @@ Wavetable::Wavetable (
   , forVoice (
               other . forVoice )
 {
-    for each ( unsigned int row in other . waveTable )
+    for ( unsigned int row : other . waveTable )
         waveTable . add (
                          row );
     selectedRow = waveTable . size ();
@@ -153,7 +154,7 @@ auto
     released       = other . released;
     releaseCounter = other . releaseCounter;
     forVoice       = other . forVoice;
-    for each ( unsigned int row in other . waveTable )
+    for ( unsigned int row : other . waveTable )
         waveTable . add (
                          row );
     selectedRow = waveTable . size ();
@@ -171,7 +172,7 @@ auto
     released       = other . released;
     releaseCounter = other . releaseCounter;
     forVoice       = other . forVoice;
-    for each ( unsigned int row in other . waveTable )
+    for ( unsigned int row : other . waveTable )
         waveTable . add (
                          row );
     selectedRow = waveTable . size ();
@@ -227,7 +228,7 @@ void
                               wt );
     }
     wt -> deleteAllChildElements ();
-    for each ( unsigned int v in waveTable )
+    for ( unsigned int v : waveTable )
     {
         if ( v < 0x100 )
         {
@@ -235,36 +236,28 @@ void
                                        "row" );
             row -> setAttribute (
                                  "triangle"
-                               , String (
-                                         ( v & 0x10 ) == 0x10 ) );
+                               , String ( static_cast < int > ( ( v & 0x10 ) == 0x10 ) ) );
             row -> setAttribute (
                                  "sawtooth"
-                               , String (
-                                         ( v & 0x20 ) == 0x20 ) );
+                               , String ( static_cast < int > ( ( v & 0x20 ) == 0x20 ) ) );
             row -> setAttribute (
                                  "pulse"
-                               , String (
-                                         ( v & 0x40 ) == 0x40 ) );
+                               , String ( static_cast < int > ( ( v & 0x40 ) == 0x40 ) ) );
             row -> setAttribute (
                                  "noise"
-                               , String (
-                                         ( v & 0x80 ) == 0x80 ) );
+                               , String ( static_cast < int > ( ( v & 0x80 ) == 0x80 ) ) );
             row -> setAttribute (
                                  "test"
-                               , String (
-                                         ( v & 0x08 ) == 0x08 ) );
+                               , String ( static_cast < int > ( ( v & 0x08 ) == 0x08 ) ) );
             row -> setAttribute (
                                  "ring"
-                               , String (
-                                         ( v & 0x04 ) == 0x04 ) );
+                               , String ( static_cast < int > ( ( v & 0x04 ) == 0x04 ) ) );
             row -> setAttribute (
                                  "sync"
-                               , String (
-                                         ( v & 0x02 ) == 0x02 ) );
+                               , String ( static_cast < int > ( ( v & 0x02 ) == 0x02 ) ) );
             row -> setAttribute (
                                  "gate"
-                               , String (
-                                         ( v & 0x01 ) == 0x01 ) );
+                               , String ( static_cast < int > ( ( v & 0x01 ) == 0x01 ) ) );
             wt -> addChildElement (
                                    row );
         }

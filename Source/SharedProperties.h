@@ -10,7 +10,7 @@ public:
     SharedProperties ();
 
     auto
-        GetPatches () const -> XmlElement*;
+        GetPatches () const -> std::unique_ptr < XmlElement >;
 
 private:
     void

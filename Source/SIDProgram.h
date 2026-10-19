@@ -1,5 +1,5 @@
 #pragma once
-#include "JuceHeader.h"
+#include <JuceHeader.h>
 #include "Listeners/ListenerInitializer.h"
 #include "Programs/Envelope.h"
 #include "Programs/Expression.h"
@@ -149,5 +149,5 @@ private:
             false
     };
     int              forVoice {};
-    static const int PATCH_VERSION = 1;
+    static constexpr int PATCH_VERSION = 1;
 };

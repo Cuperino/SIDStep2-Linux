@@ -35,9 +35,14 @@ public:
 
     void
         releaseResources () override;
-#ifndef JucePlugin_PreferredChannelConfigurations
-    bool setPreferredBusArrangement (bool isInput, int bus, const AudioChannelSet& preferredSet) override;
-#endif
+
+    // Output only: stereo by default, mono also accepted (the SID is mono and
+    // is mirrored to every output channel).
+    auto
+        isBusesLayoutSupported (
+                const BusesLayout& layouts
+                ) const -> bool override;
+
     void
         processBlock (
                 AudioSampleBuffer& buffer

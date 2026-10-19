@@ -1,7 +1,7 @@
 #ifndef SIDSTEPLOOKANDFEEL_H_INCLUDED
 #define SIDSTEPLOOKANDFEEL_H_INCLUDED
 
-#include "../../JuceLibraryCode/JuceHeader.h"
+#include <JuceHeader.h>
 
 class JUCE_API  SIDStepLookAndFeel:	public juce::LookAndFeel_V3 {
 public:

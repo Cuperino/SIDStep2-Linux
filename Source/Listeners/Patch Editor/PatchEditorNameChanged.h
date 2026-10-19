@@ -2,7 +2,7 @@
 #define PATCHEDITORNAMECHANGED_H_INCLUDED
 
 
-#include "../../JuceLibraryCode/JuceHeader.h"
+#include <JuceHeader.h>
 
 
 class PatchEditorNameChanged {

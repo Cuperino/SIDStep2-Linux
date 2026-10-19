@@ -1,6 +1,6 @@
 #include "Envelope.h"
 
-#include "../JuceLibraryCode/JuceHeader.h"
+#include <JuceHeader.h>
 
 #include "../SIDProgram.h"
 

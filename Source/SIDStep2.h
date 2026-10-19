@@ -33,6 +33,7 @@ class SidStep2 final
         , public PatchEditorLiveModeClicked
         , public LiveExportArmed
         , public LiveDoneExporting
+        , public std::enable_shared_from_this < SidStep2 >
 {
 public:
     explicit

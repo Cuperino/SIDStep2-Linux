@@ -87,8 +87,9 @@ void
 {
     recording = record;
     MessageManager::callAsync (
-                               [=] ()
+                               [=, safe_this = Component::SafePointer < CommandView > ( this )] ()
                                {
+                                   if ( safe_this == nullptr ) { return; }
                                    removeAllChildren ();
                                    rows . clear ();
                                    size_t max_frame = 0;

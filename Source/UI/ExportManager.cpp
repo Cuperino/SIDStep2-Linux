@@ -119,8 +119,9 @@ void
     AttachRecording (
                      record );
     MessageManager::callAsync (
-                               [=] ()
+                               [=, safe_this = Component::SafePointer < ExportManager > ( this )] ()
                                {
+                                   if ( safe_this == nullptr ) { return; }
                                    setVisible (
                                                true );
                                } );

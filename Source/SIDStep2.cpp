@@ -190,8 +190,10 @@ void
         const Exporter exporter (
                                  recorder );
         MessageManager::callAsync (
-                                   [=] ()
+                                   [=, weak_this = weak_from_this ()] ()
                                    {
+                                       const auto self = weak_this . lock ();
+                                       if ( self == nullptr ) { return; }
                                        exporter . ToPatterns (
                                                               title . toStdString ()
                                                             , artist . toStdString () );
@@ -255,8 +257,10 @@ void
                 const Exporter exporter (
                                          recorder );
                 MessageManager::callAsync (
-                                           [=] ()
+                                           [=, weak_this = weak_from_this ()] ()
                                            {
+                                               const auto self = weak_this . lock ();
+                                               if ( self == nullptr ) { return; }
                                                exporter . ToPatterns (
                                                                       title . toStdString ()
                                                                     , artist . toStdString () );
@@ -627,8 +631,10 @@ void
                            stream );
     }
     MessageManager::callAsync (
-                               [=] ()
+                               [=, weak_this = weak_from_this ()] ()
                                {
+                                   const auto self = weak_this . lock ();
+                                   if ( self == nullptr ) { return; }
                                    dispatcher -> bankRefreshLive -> call (
                                                                           &BankRefreshLive::onBankRefreshLive );
                                    dispatcher -> patchEditorLiveModeClickedListeners -> call (

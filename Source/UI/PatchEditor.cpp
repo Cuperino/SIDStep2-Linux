@@ -1212,6 +1212,7 @@ PatchEditor::~PatchEditor ()
     wavetable  = nullptr;
     noteTable  = nullptr;
     pulseTable = nullptr;
+    setLookAndFeel ( nullptr );
     look       = nullptr;
     //[/Destructor]
 }
@@ -1751,8 +1752,9 @@ void
                                        , dontSendNotification );
     repaint ();
     MessageManager::callAsync (
-                               [=] ()
+                               [=, safe_this = Component::SafePointer < PatchEditor > ( this )] ()
                                {
+                                   if ( safe_this == nullptr ) { return; }
                                    //dispatcher -> patchEditorShowWaveTableListeners -> call (
                                    //                                                         &PatchEditorShowWaveTable::onPatchEditorShowWaveTable );
                                } );
@@ -1769,8 +1771,9 @@ void
     PatchEditor::onLivePatchEditorModeClicked ()
 {
     MessageManager::callAsync (
-                               [=] ()
+                               [=, safe_this = Component::SafePointer < PatchEditor > ( this )] ()
                                {
+                                   if ( safe_this == nullptr ) { return; }
                                    setVisible (
                                                true );
                                } );

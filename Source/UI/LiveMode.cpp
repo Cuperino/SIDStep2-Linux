@@ -2541,6 +2541,7 @@ LiveMode::~LiveMode ()
 
 
     //[Destructor]. You can add your own custom destruction code here..
+    setLookAndFeel ( nullptr );
     look = nullptr;
     //[/Destructor]
 }
@@ -3421,8 +3422,9 @@ void
             )
 {
     MessageManager::callAsync (
-                               [=] ()
+                               [=, safe_this = Component::SafePointer < LiveMode > ( this )] ()
                                {
+                                   if ( safe_this == nullptr ) { return; }
                                    switch ( voice )
                                    {
                                        case SID_VOICE_1:
@@ -3478,8 +3480,9 @@ void
     LiveMode::HidePatchSelector () const
 {
     MessageManager::callAsync (
-                               [=] ()
+                               [=, safe_this = Component::SafePointer < LiveMode > ( const_cast < LiveMode* > ( this ) )] ()
                                {
+                                   if ( safe_this == nullptr ) { return; }
                                    patchSelector -> setVisible (
                                                                 false );
                                } );
@@ -3491,8 +3494,9 @@ void
     LiveMode::RefreshPatches ()
 {
     MessageManager::callAsync (
-                               [=] ()
+                               [=, safe_this = Component::SafePointer < LiveMode > ( this )] ()
                                {
+                                   if ( safe_this == nullptr ) { return; }
                                    //patch1Slider->setRange(1, core->getPatchListSize(), 1);
                                    //patch2Slider->setRange(1, core->getPatchListSize(), 1);
                                    //patch3Slider->setRange(1, core->getPatchListSize(), 1);
@@ -3554,8 +3558,9 @@ void
             )
 {
     MessageManager::callAsync (
-                               [=] ()
+                               [=, safe_this = Component::SafePointer < LiveMode > ( this )] ()
                                {
+                                   if ( safe_this == nullptr ) { return; }
                                    switch ( voice )
                                    {
                                        case SID_VOICE_1:
@@ -3609,8 +3614,9 @@ void
             )
 {
     MessageManager::callAsync (
-                               [=] ()
+                               [=, safe_this = Component::SafePointer < LiveMode > ( this )] ()
                                {
+                                   if ( safe_this == nullptr ) { return; }
                                    switch ( voice )
                                    {
                                        case SID_VOICE_1:
@@ -3663,8 +3669,9 @@ void
             )
 {
     MessageManager::callAsync (
-                               [=] ()
+                               [=, safe_this = Component::SafePointer < LiveMode > ( this )] ()
                                {
+                                   if ( safe_this == nullptr ) { return; }
                                    switch ( voice )
                                    {
                                        case SID_VOICE_1:
@@ -3717,8 +3724,9 @@ void
             )
 {
     MessageManager::callAsync (
-                               [=] ()
+                               [=, safe_this = Component::SafePointer < LiveMode > ( this )] ()
                                {
+                                   if ( safe_this == nullptr ) { return; }
                                    switch ( voice )
                                    {
                                        case SID_VOICE_1:
@@ -3771,8 +3779,9 @@ void
             )
 {
     MessageManager::callAsync (
-                               [=] ()
+                               [=, safe_this = Component::SafePointer < LiveMode > ( this )] ()
                                {
+                                   if ( safe_this == nullptr ) { return; }
                                    switch ( voice )
                                    {
                                        case SID_VOICE_1:
@@ -3826,8 +3835,9 @@ void
             )
 {
     MessageManager::callAsync (
-                               [=] ()
+                               [=, safe_this = Component::SafePointer < LiveMode > ( this )] ()
                                {
+                                   if ( safe_this == nullptr ) { return; }
                                    switch ( voice )
                                    {
                                        case SID_VOICE_1:
@@ -3868,8 +3878,9 @@ void
             )
 {
     MessageManager::callAsync (
-                               [=] ()
+                               [=, safe_this = Component::SafePointer < LiveMode > ( this )] ()
                                {
+                                   if ( safe_this == nullptr ) { return; }
                                    cutoffSlider -> setValue (
                                                              value
                                                            , dontSendNotification );
@@ -3889,8 +3900,9 @@ void
             )
 {
     MessageManager::callAsync (
-                               [=] ()
+                               [=, safe_this = Component::SafePointer < LiveMode > ( this )] ()
                                {
+                                   if ( safe_this == nullptr ) { return; }
                                    volumeSlider -> setValue (
                                                              value
                                                            , dontSendNotification );
@@ -3911,8 +3923,9 @@ void
             )
 {
     MessageManager::callAsync (
-                               [=] ()
+                               [=, safe_this = Component::SafePointer < LiveMode > ( this )] ()
                                {
+                                   if ( safe_this == nullptr ) { return; }
                                    switch ( voice )
                                    {
                                        case SID_VOICE_1:
@@ -3976,8 +3989,9 @@ void
     }
 
     MessageManager::callAsync (
-                               [=] ()
+                               [=, safe_this = Component::SafePointer < LiveMode > ( this )] ()
                                {
+                                   if ( safe_this == nullptr ) { return; }
                                    switch ( voice )
                                    {
                                        case SID_VOICE_1:
@@ -4031,8 +4045,9 @@ void
             )
 {
     MessageManager::callAsync (
-                               [=] ()
+                               [=, safe_this = Component::SafePointer < LiveMode > ( this )] ()
                                {
+                                   if ( safe_this == nullptr ) { return; }
                                    switch ( voice )
                                    {
                                        case SID_VOICE_1:
@@ -4074,8 +4089,9 @@ void
             )
 {
     MessageManager::callAsync (
-                               [=] ()
+                               [=, safe_this = Component::SafePointer < LiveMode > ( this )] ()
                                {
+                                   if ( safe_this == nullptr ) { return; }
                                    switch ( voice )
                                    {
                                        case SID_VOICE_1:
@@ -4126,8 +4142,9 @@ void
     LiveMode::onPatchEditorLiveModeClicked ()
 {
     MessageManager::callAsync (
-                               [=] ()
+                               [=, safe_this = Component::SafePointer < LiveMode > ( this )] ()
                                {
+                                   if ( safe_this == nullptr ) { return; }
                                    setVisible (
                                                true );
                                } );
@@ -4140,8 +4157,9 @@ void
             )
 {
     MessageManager::callAsync (
-                               [=] ()
+                               [=, safe_this = Component::SafePointer < LiveMode > ( this )] ()
                                {
+                                   if ( safe_this == nullptr ) { return; }
                                    patchSelector -> setVisible (
                                                                 false );
                                    RefreshPatches ();
@@ -4154,8 +4172,9 @@ void
             )
 {
     MessageManager::callAsync (
-                               [=] ()
+                               [=, safe_this = Component::SafePointer < LiveMode > ( this )] ()
                                {
+                                   if ( safe_this == nullptr ) { return; }
                                    int listSize = names . size ();
                                    if ( listSize < 2 )
                                        listSize = 2;
@@ -4207,7 +4226,7 @@ void
                 125 );
     // queue for display thread
     MessageManager::callAsync (
-                               [=] () { repaint (); } );
+                               [safe_this = Component::SafePointer < LiveMode > ( this )] () { if ( safe_this != nullptr ) { safe_this -> repaint (); } } );
 }
 
 void
@@ -4217,7 +4236,7 @@ void
     quarterNoteTicked = false;
     // queue for display thread
     MessageManager::callAsync (
-                               [=] () { repaint (); } );
+                               [safe_this = Component::SafePointer < LiveMode > ( this )] () { if ( safe_this != nullptr ) { safe_this -> repaint (); } } );
 }
 
 void
@@ -4225,7 +4244,7 @@ void
 {
     armed = false;
     MessageManager::callAsync (
-                               [=] () { repaint (); } );
+                               [safe_this = Component::SafePointer < LiveMode > ( this )] () { if ( safe_this != nullptr ) { safe_this -> repaint (); } } );
 }
 
 void
@@ -4234,8 +4253,9 @@ void
             )
 {
     MessageManager::callAsync (
-                               [=] ()
+                               [=, safe_this = Component::SafePointer < LiveMode > ( this )] ()
                                {
+                                   if ( safe_this == nullptr ) { return; }
                                    setVisible (
                                                false );
                                } );
@@ -4247,8 +4267,9 @@ void
             )
 {
     MessageManager::callAsync (
-                               [=] ()
+                               [=, safe_this = Component::SafePointer < LiveMode > ( this )] ()
                                {
+                                   if ( safe_this == nullptr ) { return; }
                                    resonanceSlider -> setValue (
                                                                 value
                                                               , dontSendNotification );
@@ -4268,8 +4289,9 @@ void
             )
 {
     MessageManager::callAsync (
-                               [=] ()
+                               [=, safe_this = Component::SafePointer < LiveMode > ( this )] ()
                                {
+                                   if ( safe_this == nullptr ) { return; }
                                    filterLowPassCheckbox -> setToggleState (
                                                                             value
                                                                           , dontSendNotification );
@@ -4285,8 +4307,9 @@ void
             )
 {
     MessageManager::callAsync (
-                               [=] ()
+                               [=, safe_this = Component::SafePointer < LiveMode > ( this )] ()
                                {
+                                   if ( safe_this == nullptr ) { return; }
                                    filterBandPassCheckbox -> setToggleState (
                                                                              value
                                                                            , dontSendNotification );
@@ -4302,8 +4325,9 @@ void
             )
 {
     MessageManager::callAsync (
-                               [=] ()
+                               [=, safe_this = Component::SafePointer < LiveMode > ( this )] ()
                                {
+                                   if ( safe_this == nullptr ) { return; }
                                    filterHighPassCheckbox -> setToggleState (
                                                                              value
                                                                            , dontSendNotification );

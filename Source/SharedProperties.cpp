@@ -21,39 +21,33 @@ auto
 void
     SharedProperties::InitializeProperties ()
 {
+    // Make sure the bank has every category element. Save As adds patches to
+    // these, so a bank without them (e.g. a fresh install) used to crash.
+    // Existing patches are kept; missing categories are added and written back.
     auto patches_element = GetPatches ();
-    if ( patches_element == nullptr )
+    auto changed         = false;
+    if ( patches_element == nullptr || !patches_element -> hasTagName ( "patches" ) )
     {
-        // Once some presets are written, then they'll be embedded and initially written out here
         patches_element = std::make_unique < XmlElement > (
-                                          "patches" );
+                                                           "patches" );
+        changed = true;
+    }
+    for ( const auto* name : { "basses", "drums", "leads", "keys", "pads", "sfx", "misc" } )
+    {
+        if ( patches_element -> getChildByName ( name ) == nullptr )
+        {
+            patches_element -> addChildElement (
+                                                new XmlElement (
+                                                                name ) );
+            changed = true;
+        }
+    }
+    if ( changed )
+    {
         setValue (
                   "patches"
                 , patches_element . get () );
-    }
-    if ( patches_element -> getNumChildElements () == 0 )
-    {
-        patches_element -> addChildElement (
-                                            new XmlElement (
-                                                            "basses" ) );
-        patches_element -> addChildElement (
-                                            new XmlElement (
-                                                            "drums" ) );
-        patches_element -> addChildElement (
-                                            new XmlElement (
-                                                            "leads" ) );
-        patches_element -> addChildElement (
-                                            new XmlElement (
-                                                            "keys" ) );
-        patches_element -> addChildElement (
-                                            new XmlElement (
-                                                            "pads" ) );
-        patches_element -> addChildElement (
-                                            new XmlElement (
-                                                            "sfx" ) );
-        patches_element -> addChildElement (
-                                            new XmlElement (
-                                                            "misc" ) );
+        saveIfNeeded ();
     }
 }
 

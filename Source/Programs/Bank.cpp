@@ -189,7 +189,7 @@ void
                                                                                     "patches" );
     auto        i                       = 0;
     XmlElement* current_program_element = nullptr;
-    for ( ; i < patches_element -> getNumChildElements () ; i++ )
+    for ( ; patches_element != nullptr && i < patches_element -> getNumChildElements () ; i++ )
     {
         current_program_element = patches_element -> getChildElement (
                                                                       i ) -> getChildByAttribute (
@@ -219,7 +219,7 @@ void
                                                                                     "patches" );
     auto        i                       = 0;
     XmlElement* current_program_element = nullptr;
-    for ( ; i < patches_element -> getNumChildElements () ; i++ )
+    for ( ; patches_element != nullptr && i < patches_element -> getNumChildElements () ; i++ )
     {
         current_program_element = patches_element -> getChildElement (
                                                                       i ) -> getChildByAttribute (
@@ -238,6 +238,7 @@ void
     properties -> setValue (
                             "patches"
                           , patches_element . get () );
+    properties -> saveIfNeeded ();
     dispatcher -> bankProgramChangedListeners -> call (
                                                        &BankProgramChanged::onBankProgramChanged
                                                      , currentProgram -> GetId () . toDashedString ()
@@ -254,11 +255,22 @@ void
     // TODO: Need way to replace old programs on a save as - in place, but not positive this works properly
     const auto old_id = currentProgram -> GetId () . toDashedString ();
     currentProgram -> ResetId ();
-    const auto patches_element = properties -> getXmlValue (
-                                                                                    "patches" );
+    auto patches_element = properties -> getXmlValue (
+                                                      "patches" );
+    if ( patches_element == nullptr )
+    {
+        patches_element = std::make_unique < XmlElement > (
+                                                           "patches" );
+    }
     auto category_element = patches_element -> getChildByName (
                                                                GetCategoryElementName (
                                                                                        category ) );
+    if ( category_element == nullptr )
+    {
+        category_element = patches_element -> createNewChildElement (
+                                                                      GetCategoryElementName (
+                                                                                              category ) );
+    }
     const auto current_program_element = new XmlElement (
                                                          "patch" );
     currentProgram -> Write (
@@ -268,6 +280,7 @@ void
     properties -> setValue (
                             "patches"
                           , patches_element . get () );
+    properties -> saveIfNeeded ();
     dispatcher -> bankProgramChangedListeners -> call (
                                                        &BankProgramChanged::onBankProgramChanged
                                                      , old_id

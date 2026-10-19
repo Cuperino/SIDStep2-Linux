@@ -35,3 +35,7 @@ cmake --build build
 This produces `build/SIDStep2_artefacts/Release/{VST3/SIDStep2.vst3,LV2/SIDStep2.lv2,Standalone/SIDStep2}`.
 Copy the VST3 bundle to `~/.vst3` and the LV2 bundle to `~/.lv2` (or configure with
 `-DSIDSTEP2_COPY_AFTER_BUILD=ON`). VST2 is only built if you pass `-DSIDSTEP2_VST2_SDK=<path>`.
+
+The plugin binaries are linked against old glibc symbol versions (`Linux/glibc_compat.c`), so they
+also load in sandboxed hosts with an older runtime, such as the Flatpak builds of LMMS (via its bundled
+Carla), Ardour or Carla.

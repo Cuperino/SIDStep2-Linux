@@ -82,6 +82,22 @@ target_compile_definitions(SIDStep2
         # The exporter uses FileChooser::browseForFileToSave (a modal loop).
         JUCE_MODAL_LOOPS_PERMITTED=1)
 
+# Keep the plugin loadable by hosts with an older glibc than the build machine
+# (e.g. Flatpak LMMS/Carla on Ubuntu 26.04). See Linux/glibc_compat.c.
+option(SIDSTEP2_GLIBC_COMPAT "Bind libm functions to old glibc symbol versions (Linux x86_64)" ON)
+if(SIDSTEP2_GLIBC_COMPAT AND CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64")
+    # Compiled straight into each plugin binary (not the shared-code archive) so
+    # the linker always sees the wrappers, even when LTO adds the references late.
+    # .symver directives must not go through LTO.
+    set_source_files_properties(Linux/glibc_compat.c PROPERTIES COMPILE_OPTIONS "-fno-lto")
+    foreach(format_target IN ITEMS SIDStep2_VST3 SIDStep2_LV2 SIDStep2_VST SIDStep2_Standalone)
+        if(TARGET ${format_target})
+            target_sources(${format_target} PRIVATE Linux/glibc_compat.c)
+            target_link_options(${format_target} PRIVATE "LINKER:--wrap=sqrtf" "LINKER:--wrap=atan2f")
+        endif()
+    endforeach()
+endif()
+
 target_link_libraries(SIDStep2
     PRIVATE
         resid

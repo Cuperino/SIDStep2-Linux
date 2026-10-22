@@ -347,6 +347,43 @@ void
                                                        , value );
 }
 
+namespace
+{
+unsigned int
+    CutoffRegisterFor (
+            const unsigned int value
+            )
+{
+    return static_cast < unsigned int > ( round ( SidRegisters::cutoff_base * pow ( SidRegisters::binary_base
+                                                                                  , 1.0 / SidRegisters::cutoff_divisor
+                                                                                  * ( static_cast < double > ( value )
+                                                                                      / SidRegisters::cutoff_range
+                                                                                      - SidRegisters::cutoff_offset ) ) ) );
+}
+
+unsigned int
+    CutoffParameterFor (
+            const unsigned int registers
+            )
+{
+    if ( registers == 0 ) { return 0; }
+    const auto estimate = SidRegisters::cutoff_range * ( log2 ( registers / SidRegisters::cutoff_base )
+                                                         * SidRegisters::cutoff_divisor
+                                                         + SidRegisters::cutoff_offset );
+    const auto centre = static_cast < int > ( round ( estimate ) );
+    unsigned int best      = 0;
+    unsigned int best_miss = ~0u;
+    for ( int v = centre - 3 ; v <= centre + 3 ; v++ )
+    {
+        if ( v < 0 || v > static_cast < int > ( SidRegisters::cutoff_range ) ) { continue; }
+        const auto r    = CutoffRegisterFor ( static_cast < unsigned int > ( v ) );
+        const auto miss = r > registers ? r - registers : registers - r;
+        if ( miss < best_miss ) { best = static_cast < unsigned int > ( v ); best_miss = miss; }
+    }
+    return best;
+}
+}
+
 void
     SidStep2::GetStateInformation (
             MemoryBlock& dest_data
@@ -411,29 +448,13 @@ void
     dest_data . append (
                         static_cast < const void* > ( artist_string )
                       , artist_length );
-    // have to calculate backwards to get value.
-    //auto log_val = static_cast<unsigned int>(
-    //    round(
-    //        cutoff_base * pow(
-    //            binary_base, 1.0 / cutoff_divisor * (
-    //                (
-    //                    static_cast<double>(
-    //                        value
-    //                        ) / cutoff_range
-    //                    ) - cutoff_offset
-    //                )
-    //        )
-    //    )
-    //    );
+    // Save the Cutoff parameter (0-2047), not the register: invert the mapping in
+    // SidRegisters, register = round(base * 2^((v / range - offset) / divisor)). The
+    // closed form lands within a step of the answer; the search picks the parameter that
+    // maps back to this exact register, so saving and loading keeps the filter as it was.
     const unsigned int cutoff_registers = sidRegisters -> registers [ CUTOFF_LO ] + ( sidRegisters -> registers [ CUTOFF_HI ] << 3 );
-    const auto cutoff1 = cutoff_registers / SidRegisters::cutoff_base;
-    const auto cutoff2 = sqrt (
-                               cutoff1 );
-    const auto cutoff3 = cutoff2 / ( 1.0 / SidRegisters::cutoff_divisor );
-    const auto cutoff4 = cutoff3 - SidRegisters::cutoff_offset;
-    const auto cutoff5 = cutoff4 * SidRegisters::cutoff_range;
-
-    const auto cutoff = static_cast < unsigned int > ( cutoff5 );
+    const auto cutoff = CutoffParameterFor (
+                                            cutoff_registers );
     dest_data . append (
                         static_cast < const void* > ( &cutoff )
                       , sizeof cutoff );
@@ -466,6 +487,10 @@ void
     stream . read (
                    &cutoff
                  , sizeof cutoff );
+    // States saved before the fix in GetStateInformation hold a broken value; keep it
+    // in range.
+    cutoff = jmin ( cutoff
+                  , static_cast < unsigned int > ( SidRegisters::cutoff_range ) );
     dispatcher -> cutoffParameterChangedListeners -> call (
                                                            &CutoffParameterChanged::onCutoffParameterChanged
                                                          , cutoff );
